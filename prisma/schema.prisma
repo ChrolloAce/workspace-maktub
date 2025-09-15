@@ -1,0 +1,295 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MANAGER
+  AGENT
+  CLIENT
+}
+
+enum AccessType { 
+  CRM 
+  GOOGLE_BUSINESS 
+  DOMAIN 
+  HOSTING 
+  AD_PLATFORM 
+  OTHER 
+}
+
+enum WebsiteStatus { 
+  NOT_STARTED 
+  IN_PROGRESS 
+  QA 
+  READY 
+  LIVE 
+  BLOCKED 
+}
+
+enum AdPlatform { 
+  META 
+  GOOGLE 
+  TIKTOK 
+  SNAP 
+  OTHER 
+}
+
+enum FileKind { 
+  IMAGE 
+  DOC 
+  VIDEO 
+  OTHER 
+}
+
+enum DealStage { 
+  LEAD 
+  QUALIFIED 
+  PROPOSAL 
+  WON 
+  LOST 
+}
+
+enum InvoiceStatus { 
+  DRAFT 
+  SENT 
+  PAID 
+  OVERDUE 
+  VOID 
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id             String        @id @default(cuid())
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?
+  image          String?
+  role           Role          @default(AGENT)
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  
+  // Relations
+  accounts       Account[]
+  sessions       Session[]
+  clients        Client[]
+  files          File[]
+  notes          Note[]
+  tasks          Task[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  users     User[]
+  clients   Client[]
+  settings  Json?
+  createdAt DateTime @default(now())
+}
+
+model Client {
+  id             String        @id @default(cuid())
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  organizationId String
+  name           String
+  email          String?
+  phone          String?
+  company        String?
+  logoUrl        String?
+  website        String?
+  primaryContact String?
+  address        String?
+  status         String?       // Active, Paused, Prospect
+  owner          User?         @relation(fields: [ownerId], references: [id])
+  ownerId        String?
+
+  // Relations
+  accesses       Access[]
+  websites       Website[]
+  adAccounts     AdAccount[]
+  projects       Project[]
+  files          File[]
+  notes          Note[]
+  deals          Deal[]
+  invoices       Invoice[]
+  transactions   Transaction[]
+  tasks          Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id        String    @id @default(cuid())
+  client    Client    @relation(fields: [clientId], references: [id])
+  clientId  String
+  name      String
+  type      String    // Website, SEO, Ads, GMB, CRM Setup, etc
+  status    String    // Not Started, In Progress, QA, Done
+  dueDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Access {
+  id        String     @id @default(cuid())
+  client    Client     @relation(fields: [clientId], references: [id])
+  clientId  String
+  type      AccessType
+  label     String
+  username  String?
+  secretEnc String?    // encrypted password/token
+  meta      Json?
+  verified  Boolean    @default(false)
+  createdAt DateTime   @default(now())
+}
+
+model Website {
+  id          String        @id @default(cuid())
+  client      Client        @relation(fields: [clientId], references: [id])
+  clientId    String
+  stack       String?       // e.g., Next.js, Webflow, WordPress
+  domain      String?
+  status      WebsiteStatus @default(NOT_STARTED)
+  lastChecked DateTime?
+  dnsOk       Boolean?      // result of DNS check
+  notes       String?
+  createdAt   DateTime      @default(now())
+}
+
+model AdAccount {
+  id         String     @id @default(cuid())
+  client     Client     @relation(fields: [clientId], references: [id])
+  clientId   String
+  platform   AdPlatform
+  externalId String?    // e.g., FB Ad Account ID
+  pixelId    String?
+  meta       Json?
+  createdAt  DateTime   @default(now())
+}
+
+model File {
+  id          String   @id @default(cuid())
+  client      Client   @relation(fields: [clientId], references: [id])
+  clientId    String
+  kind        FileKind @default(OTHER)
+  url         String
+  name        String
+  size        Int?
+  tags        String // JSON string for tags
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdById String?
+  createdAt   DateTime @default(now())
+}
+
+model Note {
+  id          String   @id @default(cuid())
+  client      Client   @relation(fields: [clientId], references: [id])
+  clientId    String
+  body        String
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdById String?
+  createdAt   DateTime @default(now())
+}
+
+model Task {
+  id         String    @id @default(cuid())
+  client     Client    @relation(fields: [clientId], references: [id])
+  clientId   String
+  title      String
+  status     String    // todo, doing, done, blocked
+  assignee   User?     @relation(fields: [assigneeId], references: [id])
+  assigneeId String?
+  dueDate    DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Deal {
+  id        String    @id @default(cuid())
+  client    Client    @relation(fields: [clientId], references: [id])
+  clientId  String
+  name      String
+  value     Int       // cents
+  stage     DealStage @default(LEAD)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Invoice {
+  id        String        @id @default(cuid())
+  client    Client        @relation(fields: [clientId], references: [id])
+  clientId  String
+  number    String        @unique
+  amount    Int           // cents
+  status    InvoiceStatus @default(DRAFT)
+  issueDate DateTime      @default(now())
+  dueDate   DateTime?
+  stripeId  String?
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  client     Client   @relation(fields: [clientId], references: [id])
+  clientId   String
+  amount     Int      // cents; positive income, negative expense
+  category   String   // revenue, software, ads, payroll, etc.
+  source     String?  // Stripe, manual, bank import
+  occurredAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  entity    String
+  entityId  String?
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
