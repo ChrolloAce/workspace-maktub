@@ -14,11 +14,11 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="flex h-screen" style={{ backgroundColor: '#f8fafc' }}>
       <Sidebar user={user} />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden md:ml-0">
         <Topbar />
-        <main className="flex-1 overflow-auto p-6 bg-slate-50">
+        <main className="flex-1 overflow-auto p-6" style={{ backgroundColor: '#f8fafc' }}>
           {children}
         </main>
       </div>

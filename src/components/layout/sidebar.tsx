@@ -44,18 +44,28 @@ export function Sidebar({ user }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
-    <div className={cn(
-      "flex h-full flex-col bg-slate-900 border-r border-slate-700 transition-all duration-300",
-      isCollapsed ? "w-16" : "w-64"
-    )}>
+    <div 
+      className={cn(
+        "flex h-full flex-col transition-all duration-300 fixed left-0 top-0 z-50 md:relative md:z-auto",
+        isCollapsed ? "w-16" : "w-64"
+      )}
+      style={{
+        backgroundColor: '#0f172a',
+        borderRight: '1px solid #334155',
+        height: '100vh'
+      }}
+    >
       {/* Header with toggle */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-slate-700">
+      <div 
+        className="flex h-16 items-center justify-between px-4"
+        style={{ borderBottom: '1px solid #334155' }}
+      >
         <div className={cn("flex items-center space-x-3", isCollapsed && "justify-center")}>
-          <Building2 className="h-8 w-8 text-blue-500 flex-shrink-0" />
+          <Building2 className="h-8 w-8 flex-shrink-0" style={{ color: '#3b82f6' }} />
           {!isCollapsed && (
             <div>
-              <h1 className="text-lg font-semibold text-white">DESKBOARD</h1>
-              <p className="text-xs text-slate-400">Sales Management</p>
+              <h1 className="text-lg font-semibold" style={{ color: '#ffffff' }}>DESKBOARD</h1>
+              <p className="text-xs" style={{ color: '#94a3b8' }}>Sales Management</p>
             </div>
           )}
         </div>
@@ -63,7 +73,8 @@ export function Sidebar({ user }: SidebarProps) {
           variant="ghost"
           size="sm"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="text-slate-400 hover:text-white hover:bg-slate-800"
+          className="hover:bg-opacity-20"
+          style={{ color: '#94a3b8' }}
         >
           {isCollapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
         </Button>
@@ -81,11 +92,12 @@ export function Sidebar({ user }: SidebarProps) {
               href={item.href}
               className={cn(
                 "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                isActive 
-                  ? "bg-blue-600 text-white" 
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white",
                 isCollapsed && "justify-center"
               )}
+              style={{
+                backgroundColor: isActive ? '#2563eb' : 'transparent',
+                color: isActive ? '#ffffff' : '#cbd5e1'
+              }}
               title={isCollapsed ? item.name : undefined}
             >
               <item.icon className="h-5 w-5 flex-shrink-0" />
@@ -97,29 +109,29 @@ export function Sidebar({ user }: SidebarProps) {
 
       {/* User Profile */}
       {user && (
-        <div className="border-t border-slate-700 p-3">
+        <div className="p-3" style={{ borderTop: '1px solid #334155' }}>
           <div className={cn(
             "flex items-center space-x-3",
             isCollapsed && "justify-center"
           )}>
             <Avatar className="h-8 w-8 flex-shrink-0">
               <AvatarImage src={user.image || undefined} />
-              <AvatarFallback className="bg-slate-700 text-white">
+              <AvatarFallback style={{ backgroundColor: '#334155', color: '#ffffff' }}>
                 {getInitials(user.name || user.email || 'User')}
               </AvatarFallback>
             </Avatar>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-medium truncate" style={{ color: '#ffffff' }}>
                   {user.name || 'User'}
                 </p>
-                <p className="text-xs text-slate-400 truncate">
+                <p className="text-xs truncate" style={{ color: '#94a3b8' }}>
                   {user.email}
                 </p>
               </div>
             )}
             {!isCollapsed && (
-              <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
+              <Button variant="ghost" size="sm" style={{ color: '#94a3b8' }}>
                 <LogOut className="h-4 w-4" />
               </Button>
             )}
