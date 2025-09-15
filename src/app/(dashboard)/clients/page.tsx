@@ -1,7 +1,7 @@
 'use client'
 
-import { UnifiedLayout } from '@/components/layout/unified-layout'
 import Link from 'next/link'
+import { ConsistentLayout } from '@/components/layout/consistent-layout'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -82,19 +82,19 @@ const clients = [
 
 export default function ClientsPage() {
   return (
-    <UnifiedLayout 
-      pageTitle="Clients"
-      pageSubtitle="Manage your client relationships and projects"
+    <ConsistentLayout 
+      title="Clients" 
+      subtitle="Manage your client relationships and projects"
     >
       <div className="space-y-6">
-        {/* Header Actions */}
-        <div className="flex items-center justify-between">
-          <div></div>
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            New Client
-          </Button>
-        </div>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div></div>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          New Client
+        </Button>
+      </div>
 
       {/* Search and Filters */}
       <div className="flex items-center space-x-4">
@@ -259,6 +259,6 @@ export default function ClientsPage() {
         </CardContent>
       </Card>
     </div>
-    </UnifiedLayout>
+    </ConsistentLayout>
   )
 }

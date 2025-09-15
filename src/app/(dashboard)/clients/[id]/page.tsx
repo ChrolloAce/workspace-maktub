@@ -1,3 +1,4 @@
+import { ConsistentLayout } from '@/components/layout/consistent-layout'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -138,8 +139,12 @@ interface ClientDetailPageProps {
 
 export default function ClientDetailPage({ params: _ }: ClientDetailPageProps) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <ConsistentLayout 
+      title={client.name} 
+      subtitle={`${client.company} • Account managed by ${client.owner.name}`}
+    >
+      <div className="space-y-6">
+      {/* Quick Actions */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link href="/clients">
@@ -148,20 +153,14 @@ export default function ClientDetailPage({ params: _ }: ClientDetailPageProps) {
               Back to Clients
             </Button>
           </Link>
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-16 w-16">
+          <div className="flex items-center space-x-3">
+            <Avatar className="h-12 w-12">
               <AvatarImage src={client.logoUrl || undefined} />
-              <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+              <AvatarFallback className="bg-primary text-primary-foreground">
                 {getInitials(client.name)}
               </AvatarFallback>
             </Avatar>
-            <div>
-              <div className="flex items-center space-x-3">
-                <h1 className="text-3xl font-semibold text-foreground">{client.name}</h1>
-                <StatusBadge status={client.status} />
-              </div>
-              <p className="text-muted-foreground">{client.company}</p>
-            </div>
+            <StatusBadge status={client.status} />
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -498,5 +497,6 @@ export default function ClientDetailPage({ params: _ }: ClientDetailPageProps) {
         </TabsContent>
       </Tabs>
     </div>
+    </ConsistentLayout>
   )
 }
