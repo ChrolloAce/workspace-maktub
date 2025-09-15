@@ -24,18 +24,19 @@ import {
   DollarSign
 } from 'lucide-react'
 import { getInitials, formatDate, formatCurrency } from '@/lib/format'
+import { getClientWebsiteScreenshot, getMobileWebsiteScreenshot } from '@/lib/screenshot'
 import Link from 'next/link'
 
 // Mock client data - will be replaced with API call
 const client = {
   id: 'client-1',
-  name: 'TechStart Inc',
-  email: 'contact@techstart.com',
-  phone: '+1 (555) 123-4567',
-  company: 'TechStart Inc',
-  website: 'https://techstart.com',
-  primaryContact: 'John Smith',
-  address: '123 Tech Street, San Francisco, CA 94105',
+  name: 'CBE Air Services',
+  email: 'cbeairservices@gmail.com',
+  phone: '(305) 560-3087',
+  company: 'CBE Air Services',
+  website: 'https://ac-company.vercel.app/',
+  primaryContact: 'Blendi',
+  address: '201 180th Dr, Sunny Isles Beach, FL 33160',
   status: 'Active',
   owner: { 
     name: 'Ali Husni', 
@@ -229,10 +230,11 @@ export default function ClientDetailPage({ params: _ }: ClientDetailPageProps) {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="access">Access</TabsTrigger>
           <TabsTrigger value="website">Website</TabsTrigger>
+          <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="files">Files</TabsTrigger>
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
           <TabsTrigger value="finance">Finance</TabsTrigger>
@@ -441,6 +443,111 @@ export default function ClientDetailPage({ params: _ }: ClientDetailPageProps) {
                   )}
                 </div>
               ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Website Preview Tab */}
+        <TabsContent value="preview" className="space-y-6">
+          <Card className="shadow-sm border border-border/60 bg-card">
+            <CardHeader>
+              <CardTitle>Website Preview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">{client.website}</h4>
+                    <p className="text-sm text-muted-foreground">Live website screenshot</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => window.open(client.website, '_blank')}
+                    >
+                      <Globe className="h-4 w-4 mr-2" />
+                      Visit Site
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => window.location.reload()}
+                    >
+                      Refresh Screenshot
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="border rounded-lg overflow-hidden bg-white">
+                  <div className="bg-gray-100 px-4 py-2 border-b">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      </div>
+                      <div className="flex-1 bg-white rounded px-3 py-1 text-sm text-gray-600">
+                        {client.website}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      {/* Desktop Screenshot */}
+                      <div>
+                        <h5 className="text-sm font-medium mb-2">Desktop View</h5>
+                        <img
+                          src={getClientWebsiteScreenshot(client.website)}
+                          alt={`Desktop screenshot of ${client.website}`}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '400px',
+                            objectFit: 'contain',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '8px'
+                          }}
+                          onError={(e) => {
+                            e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iODAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik02MDAgMzUwSDY1MFY0NTBINjAwVjM1MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHRleHQgeD0iNjAwIiB5PSI0MDAiIGZpbGw9IiM2Qjc0ODEiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TY3JlZW5zaG90IG5vdCBhdmFpbGFibGU8L3RleHQ+Cjwvc3ZnPgo='
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Mobile Screenshot */}
+                      <div>
+                        <h5 className="text-sm font-medium mb-2">Mobile View</h5>
+                        <div className="flex justify-center">
+                          <img
+                            src={getMobileWebsiteScreenshot(client.website)}
+                            alt={`Mobile screenshot of ${client.website}`}
+                            style={{
+                              width: '200px',
+                              height: 'auto',
+                              maxHeight: '400px',
+                              objectFit: 'contain',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '12px'
+                            }}
+                            onError={(e) => {
+                              e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzc1IiBoZWlnaHQ9IjY2NyIgdmlld0JveD0iMCAwIDM3NSA2NjciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzNzUiIGhlaWdodD0iNjY3IiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjE4Ny41IiB5PSIzMzMiIGZpbGw9IiM2Qjc0ODEiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb2JpbGUgc2NyZWVuc2hvdCBub3QgYXZhaWxhYmxlPC90ZXh0Pgo8L3N2Zz4K'
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="secondary" className="bg-white/90">
+                        Live Preview
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-xs text-muted-foreground">
+                  Screenshot automatically updated using ScreenshotOne API. Last updated: {new Date().toLocaleString()}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
