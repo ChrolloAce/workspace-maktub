@@ -19,7 +19,8 @@ interface ScreenshotOptions {
 }
 
 export function generateScreenshotUrl(options: ScreenshotOptions): string {
-  const accessKey = process.env.SCREENSHOTONE_ACCESS_KEY || 'wfxpWMabPZFCqA'
+  // Use the public access key directly for client-side usage
+  const accessKey = 'wfxpWMabPZFCqA'
   
   const params = new URLSearchParams({
     url: options.url,
