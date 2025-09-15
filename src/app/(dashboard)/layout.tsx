@@ -1,9 +1,9 @@
-import DashboardLayoutClient from './layout-client'
+import SimpleLayout from './simple-layout'
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <DashboardLayoutClient>{children}</DashboardLayoutClient>
+  return <SimpleLayout>{children}</SimpleLayout>
 }

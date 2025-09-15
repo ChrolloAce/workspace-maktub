@@ -78,18 +78,7 @@ const recentInvoices = [
 
 export default function Dashboard() {
   return (
-    <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold text-foreground">
-            Welcome Back, Ali Husni 👋
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Here&apos;s what&apos;s happening with your agency today
-          </p>
-        </div>
-      </div>
+    <div className="space-y-6">{/* Header is now in layout */}
 
       {/* KPI Cards */}
       <div className="dashboard-grid">
