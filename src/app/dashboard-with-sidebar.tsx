@@ -19,6 +19,8 @@ import {
   MoreHorizontal,
   Filter
 } from 'lucide-react'
+import { CustomLineChart } from '@/components/charts/line-chart'
+import { DonutChart } from '@/components/charts/donut-chart'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -28,6 +30,28 @@ const navigation = [
   { name: 'Invoices', href: '/invoices', icon: FileText },
   { name: 'Reports', href: '/reports', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
+]
+
+// Chart data
+const salesData = [
+  { name: 'Jan', value: 1000 },
+  { name: 'Feb', value: 1200 },
+  { name: 'Mar', value: 900 },
+  { name: 'Apr', value: 1400 },
+  { name: 'May', value: 1300 },
+  { name: 'Jun', value: 1600 },
+  { name: 'Jul', value: 1800 },
+  { name: 'Aug', value: 1700 },
+  { name: 'Sep', value: 1900 },
+  { name: 'Oct', value: 2100 },
+  { name: 'Nov', value: 1950 },
+  { name: 'Dec', value: 2200 },
+]
+
+const invoiceStats = [
+  { name: 'Total Paid', value: 234, color: '#10B981' },
+  { name: 'Total Overdue', value: 514, color: '#4F46E5' },
+  { name: 'Total Unpaid', value: 345, color: '#F59E0B' },
 ]
 
 export default function DashboardWithSidebar() {
@@ -40,8 +64,8 @@ export default function DashboardWithSidebar() {
       <div
         style={{
           width: sidebarOpen ? '256px' : '64px',
-          backgroundColor: '#1e293b',
-          borderRight: '1px solid #334155',
+          backgroundColor: '#000000',
+          borderRight: '1px solid #1f2937',
           display: 'flex',
           flexDirection: 'column',
           transition: 'width 0.3s ease',
@@ -56,7 +80,7 @@ export default function DashboardWithSidebar() {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '0 16px',
-            borderBottom: '1px solid #334155',
+            borderBottom: '1px solid #1f2937',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -115,7 +139,7 @@ export default function DashboardWithSidebar() {
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = '#334155'
+                    e.currentTarget.style.backgroundColor = '#1f2937'
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -135,7 +159,7 @@ export default function DashboardWithSidebar() {
         <div
           style={{
             padding: '12px',
-            borderTop: '1px solid #334155',
+            borderTop: '1px solid #1f2937',
             display: 'flex',
             alignItems: 'center',
             gap: sidebarOpen ? '12px' : '0',
@@ -147,7 +171,7 @@ export default function DashboardWithSidebar() {
               width: '32px',
               height: '32px',
               borderRadius: '50%',
-              backgroundColor: '#334155',
+              backgroundColor: '#1f2937',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
@@ -384,25 +408,8 @@ export default function DashboardWithSidebar() {
                   <MoreHorizontal size={20} style={{ color: '#64748b' }} />
                 </button>
               </div>
-              <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px' }}>
-                  1,093
-                </div>
-                <div style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>Total</div>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', fontSize: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '12px', height: '12px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span>Total Paid: 234</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '12px', height: '12px', backgroundColor: '#4f46e5', borderRadius: '50%' }}></div>
-                    <span>Total Overdue: 514</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '12px', height: '12px', backgroundColor: '#f59e0b', borderRadius: '50%' }}></div>
-                    <span>Total Unpaid: 345</span>
-                  </div>
-                </div>
+              <div style={{ height: '280px' }}>
+                <DonutChart data={invoiceStats} height={280} />
               </div>
             </div>
 
@@ -428,8 +435,8 @@ export default function DashboardWithSidebar() {
                   <MoreHorizontal size={20} style={{ color: '#64748b' }} />
                 </button>
               </div>
-              <div style={{ textAlign: 'center', padding: '40px 0', color: '#64748b' }}>
-                📈 Sales Chart Coming Soon
+              <div style={{ height: '280px' }}>
+                <CustomLineChart data={salesData} height={280} color="#3b82f6" />
               </div>
             </div>
           </div>
