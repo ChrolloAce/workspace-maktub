@@ -1,16 +1,18 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { UnifiedLayout } from '@/components/layout/unified-layout'
+import { Card, CardContent } from '@/components/ui/card'
 
 export default function TasksPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-semibold text-foreground">Tasks</h1>
-        <p className="text-muted-foreground mt-1">
-          Track and manage your team&apos;s tasks and deliverables
-        </p>
-      </div>
-
-      <Card className="shadow-sm border border-border/60 bg-card">
+    <UnifiedLayout 
+      pageTitle="Tasks"
+      pageSubtitle="Track and manage your team's tasks and deliverables"
+    >
+      <Card style={{ 
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        border: '1px solid #e5e5e5',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
+      }}>
         <CardContent className="p-6">
           <div className="text-center py-12">
             <h3 className="text-lg font-medium text-muted-foreground">Task Management Coming Soon</h3>
@@ -20,6 +22,6 @@ export default function TasksPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </UnifiedLayout>
   )
 }
