@@ -1,27 +1,9 @@
-import { Sidebar } from '@/components/layout/sidebar'
-import { Topbar } from '@/components/layout/topbar'
+import DashboardLayoutClient from './layout-client'
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // TODO: Get user from session
-  const user = {
-    name: 'Ali Husni',
-    email: 'ali@example.com',
-    image: null,
-  }
-
-  return (
-    <div className="flex h-screen" style={{ backgroundColor: '#f8fafc' }}>
-      <Sidebar user={user} />
-      <div className="flex-1 flex flex-col overflow-hidden md:ml-0">
-        <Topbar />
-        <main className="flex-1 overflow-auto p-6" style={{ backgroundColor: '#f8fafc' }}>
-          {children}
-        </main>
-      </div>
-    </div>
-  )
+  return <DashboardLayoutClient>{children}</DashboardLayoutClient>
 }
